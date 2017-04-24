@@ -19,10 +19,9 @@ namespace api_test.Controllers
         }
 
         [HttpPost]
-        public object Post([FromBody]string value)
+        public object Post([FromBody]dynamic value)
         {
-
-            return default(object);
+            return value;
         }
     }
 }
