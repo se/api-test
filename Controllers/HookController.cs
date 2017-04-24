@@ -22,17 +22,34 @@ namespace api_test.Controllers
         [HttpPost]
         public object Post([FromBody]dynamic value)
         {
+            var isCompleted = false;
+
+            if (value != null && value.result != null && value.result.actionIncomplete == false)
+            {
+                isCompleted = true;
+            }
+
+            if (!isCompleted)
+            {
+                return null;
+            }
+
             if (value.result.action == "LOGIN")
             {
                 var result = value.result;
-                var userName = result.parameters.UserName;
-                if (!string.IsNullOrEmpty(userName))
+                var userName = (string)value.result.parameters.UserName;
+                var password = (string)value.result.parameters.Password;
+                if (string.IsNullOrEmpty(userName))
                 {
                     return Speech("No way! Did you forget to type your User Name?");
                 }
-                else if (!"se".Equals(userName))
+                else if (string.IsNullOrEmpty(password))
                 {
-                    return Speech("Your User Name is not correct.");
+                    return Speech("No way! Did you forget to type your Password? Come on man!");
+                }
+                else if (!"se".Equals(userName) || !"pass".Equals(password))
+                {
+                    return Speech("Your User Name or Password is not correct.");
                 }
                 else
                 {
